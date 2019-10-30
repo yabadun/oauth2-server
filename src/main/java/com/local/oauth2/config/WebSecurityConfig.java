@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.requestMatchers().antMatchers("/oauth/**", "/login/**", "/logout/**", "*.html").and().authorizeRequests()
-				.antMatchers("/oauth/**").authenticated().and().formLogin().permitAll();
+				.antMatchers("/oauth/**").authenticated().and().formLogin().loginPage("https://github.com/login").loginProcessingUrl("/login").permitAll();
 	}
 
 	@Override
