@@ -1,5 +1,7 @@
 package com.local.oauth2.config;
 
+import java.util.ArrayList;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,26 +10,38 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+/**
+ * spring-security 配置
+ * 
+ * @author lcp
+ *
+ */
 @EnableWebSecurity
-
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new PasswordEncoder() {
+
+			@Override
+			public String encode(CharSequence rawPassword) {
+				return rawPassword.toString();
+			}
+
+			@Override
+			public boolean matches(CharSequence rawPassword, String encodedPassword) {
+				return encodedPassword.equals(rawPassword.toString());
+			}
+
+		};
 	}
 
-	@Bean
 	@Override
 	protected UserDetailsService userDetailsService() {
-		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-		manager.createUser(
-				User.withUsername("AliGenie").password(passwordEncoder().encode("123456")).authorities("USER").build());
-		return manager;
+		return username -> new User(username, "111111", new ArrayList<>());
+
 	}
 
 	@Bean
@@ -38,8 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.requestMatchers().antMatchers("/oauth/**", "/login/**", "/logout/**", "*.html").and().authorizeRequests()
-				.antMatchers("/oauth/**").authenticated().and().formLogin().loginPage("https://github.com/login").loginProcessingUrl("/login").permitAll();
+		http.csrf().disable();
+		http.requestMatchers().antMatchers("/oauth/**").and().authorizeRequests().antMatchers("/oauth/**")
+				.authenticated().and().formLogin().loginPage("/login/page").loginProcessingUrl("/oauth/login/process")
+				.permitAll();
 	}
 
 	@Override
