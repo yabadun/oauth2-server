@@ -53,11 +53,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 //		clients.jdbc(dataSource);
-
 		clients.inMemory().withClient("AliGenie").authorizedGrantTypes("refresh_token", "authorization_code")
 				.scopes("all").secret(passwordEncoder.encode("123456"))
 				.redirectUris("http://localhost:9090/oauth/callback").accessTokenValiditySeconds(60 * 60 * 24)
-				.refreshTokenValiditySeconds(60 * 60 * 24).autoApprove(true);
+				.refreshTokenValiditySeconds(60 * 60 * 24);
 	}
 
 }
