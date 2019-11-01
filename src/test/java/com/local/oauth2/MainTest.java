@@ -6,7 +6,7 @@ public class MainTest {
 
 	public static void main(String[] args) {
 
-		System.out.println(new BCryptPasswordEncoder().encode("933615"));
+		System.out.println(String.valueOf(System.currentTimeMillis()).length());
 	}
 
 }

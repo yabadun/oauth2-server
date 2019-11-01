@@ -1,14 +1,15 @@
-package com.local.oauth2.config;
+package com.local.oauth.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 /**
- * 
- * @author J015
+ * 资源服务器配置
+ * @author lcp
  *
  */
-@EnableResourceServer
+@Configuration
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Override

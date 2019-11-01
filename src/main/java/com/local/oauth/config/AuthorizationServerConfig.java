@@ -1,9 +1,8 @@
-package com.local.oauth2.config;
-
-import javax.sql.DataSource;
+package com.local.oauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,14 +12,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 /**
  * oauth2授权服务器配置
  * 
  * @author lcp
  */
-@EnableAuthorizationServer
+@Configuration
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired
@@ -28,12 +27,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private DataSource dataSource;
+//	@Autowired
+//	private DataSource dataSource;
 
 	@Bean
 	public TokenStore tokenStore() {
-		return new JdbcTokenStore(dataSource);
+		// TODO 改为数据库或redis
+		return new InMemoryTokenStore();
+
 	}
 
 	@Override
@@ -52,10 +53,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 //		clients.jdbc(dataSource);
-		
+
 		clients.inMemory().withClient("AliGenie").authorizedGrantTypes("refresh_token", "authorization_code")
-				.scopes("all").authorities("oauth2").secret(passwordEncoder.encode("123456"))
-				.redirectUris("https://open.bot.tmall.com/oauth/callback").accessTokenValiditySeconds(60 * 60 * 24)
+				.scopes("all").secret(passwordEncoder.encode("123456"))
+				.redirectUris("http://localhost:9090/oauth/callback").accessTokenValiditySeconds(60 * 60 * 24)
 				.refreshTokenValiditySeconds(60 * 60 * 24).autoApprove(true);
 	}
 
