@@ -1,17 +1,20 @@
 pipeline {
   agent any
   stages {
-    stage('clean') {
+    stage('mvn') {
+      steps {
+        tool(name: 'mvn', type: 'maven')
+      }
+    }
+
+    stage('') {
       steps {
         withSonarQubeEnv('sonarqube') {
-          sh 'mvn clean package sonar:sonar'
+          sh 'mvn sonar:sonar'
         }
 
       }
     }
 
-  }
-  environment {
-    mvn = 'maven'
   }
 }
