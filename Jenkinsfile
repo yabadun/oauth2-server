@@ -10,7 +10,7 @@ pipeline {
     stage('error') {
       steps {
         withSonarQubeEnv('sonarqube') {
-          sh '/var/jenkins_home/tools/hudson.tasks.Maven_MavenInstallation/mvn/bin/mvn sonar:sonar'
+          sh '/var/jenkins_home/tools/hudson.tasks.Maven_MavenInstallation/mvn/bin/mvn sonar:sonar -Dsonar.java.binaries=target/classes'
         }
 
       }
