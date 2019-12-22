@@ -7,10 +7,10 @@ pipeline {
       }
     }
 
-    stage('') {
+    stage('error') {
       steps {
         withSonarQubeEnv('sonarqube') {
-          sh 'mvn sonar:sonar'
+          sh '/var/jenkins_home/tools/hudson.tasks.Maven_MavenInstallation/mvn/bin/mvn sonar:sonar'
         }
 
       }
