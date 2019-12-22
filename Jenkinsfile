@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('clean') {
       steps {
-        withSonarQubeEnv 'oauth2'
+        withSonarQubeEnv 'sonarqube scanner'
       }
     }
 
